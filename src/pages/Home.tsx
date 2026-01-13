@@ -75,17 +75,6 @@ export const Home = () => {
         onViewChange={setView}
       />
 
-      {/* Demo Button to trigger Modal */}
-      <button
-        onClick={() => setIsErrorModalOpen(true)}
-        className="btn-demo"
-      >
-        <div className="flex items-center gap-2">
-          <AlertCircle className="w-4 h-4" />
-          <span>Probar Modal</span>
-        </div>
-      </button>
-
       <div className="w-full">
         {loading && (
           <p className="text-neutral-400 text-center py-10 italic">
@@ -101,10 +90,10 @@ export const Home = () => {
                   const id = movie.imdbID ?? movie.id ?? String(index);
                   return (
                     <MovieCard
-                    key={movie.imdbID || index}
-                    movie={movie}
-                    index={index}
-                  />
+                      key={id}
+                      movie={movie}
+                      index={index}
+                    />
                   );
                 })}
               </div>
