@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
-export const NavbarLogo: React.FC<{ Icon: LucideIcon }> = ({ Icon }) => {
+export const NavbarLogo: React.FC<{ Icon: LucideIcon }> = ({ }) => {
   return (
     <div className="flex items-center gap-3 group cursor-pointer">
       <svg 

@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Film, Home as HomeIcon, Heart } from "lucide-react";
 import Navbar from "./layouts/NavBar";

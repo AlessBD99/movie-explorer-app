@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
 export const EnvError: React.FC = () => {
   return (
