@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { Movie } from "../core/models/Movie";
 import { ApiMovieRepository } from "../core/repositories/ApiMovieRepository";
 import { MovieService } from "../core/services/MovieService";
@@ -21,27 +21,7 @@ export const useMovies = () => {
     return FilterService.filterMovies(allMovies, filters);
   }, [allMovies, filters]);
 
-  useEffect(() => {
-    const loadInitial = async () => {
-      try {
-        setLoading(true);
-        const data = await movieService.searchMoviesByTitle("Inception");
-        if (data.Response === "True") {
-          setAllMovies((data.Search as Movie[]) || []);
-          setTotalResults(parseInt(data.totalResults || "0", 10));
-        } else {
-          setError(data.Error || "Error desconocido");
-        }
-      } catch (err) {
-        setError("Error al cargar las películas");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadInitial();
-  }, [movieService]);
+  // Removed automatic initial search for "Inception"
 
   const searchMoviesByTitle = useCallback(async (title: string, page: number = 1) => {
     if (!title) {

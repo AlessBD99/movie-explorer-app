@@ -68,12 +68,15 @@ export const Home = () => {
         />
       </div>
 
-      <MovieFilters 
-        type={filters.type}
-        view={view}
-        onTypeChange={(type) => updateFilters({ type })}
-        onViewChange={setView}
-      />
+
+      {movies.length > 0 && (
+        <MovieFilters 
+          type={filters.type}
+          view={view}
+          onTypeChange={(type) => updateFilters({ type })}
+          onViewChange={setView}
+        />
+      )}
 
       <div className="w-full">
         {loading && (
@@ -144,7 +147,7 @@ export const Home = () => {
                 breakLabel="..."
                 nextLabel={<ChevronRight className="w-5 h-5" />}
                 onPageChange={({ selected }) => {
-                  searchMoviesByTitle(searchQuery || "Inception", selected + 1);
+                  searchMoviesByTitle(searchQuery, selected + 1);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 pageRangeDisplayed={3}
