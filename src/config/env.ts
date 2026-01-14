@@ -1,4 +1,4 @@
-const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+const apiKey = import.meta.env.VITE_OMDB_API;
 const baseUrl = import.meta.env.VITE_OMDB_BASE_URL;
 
 const validateEnv = (): boolean => {
