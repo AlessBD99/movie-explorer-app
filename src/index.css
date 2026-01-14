@@ -34,7 +34,6 @@
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
     --gold: 38 92% 50%;
     --gold-light: 43 96% 58%;
     --gold-dark: 32 88% 42%;
@@ -84,7 +83,6 @@
     @apply scale-95 opacity-90;
   }
 
-  /* Pagination Styles */
   .pagination-link {
     @apply w-10 h-10 flex items-center justify-center bg-neutral-800/40 border border-white/5 text-neutral-400 font-bold transition-all duration-300 rounded-xl;
   }
@@ -117,7 +115,6 @@
     border-color: hsl(var(--gold) / 0.2);
   }
 
-  /* Nav Link Styles */
   .nav-link {
     @apply flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-300 rounded-xl relative overflow-hidden;
   }
@@ -156,7 +153,6 @@
     @apply bg-gradient-to-r from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] bg-clip-text text-transparent;
   }
 
-  /* Settings Button */
   .btn-settings {
     @apply p-2.5 rounded-full bg-white/5 text-neutral-400 transition-all relative border border-transparent;
   }
@@ -167,13 +163,11 @@
     border-color: hsl(var(--gold) / 0.2);
   }
 
-  /* Demo/Test Button */
   .btn-demo {
     @apply fixed bottom-8 right-8 z-40 px-5 py-3 bg-neutral-900/80 backdrop-blur-md border border-white/10 rounded-2xl font-bold text-sm shadow-2xl hover:bg-neutral-800 hover:scale-105 transition-all;
     color: hsl(var(--gold));
   }
 
-  /* Tooltip Gold */
   .tooltip-gold {
     @apply absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-neutral-900 text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap shadow-xl shadow-black/50 backdrop-blur-md;
     color: hsl(var(--gold));

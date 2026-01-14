@@ -1,8 +1,16 @@
-export const env = {
-  OMDB_API_KEY: import.meta.env.VITE_OMDB_API_KEY || "1f7526c4",
-  OMDB_BASE_URL: import.meta.env.VITE_OMDB_BASE_URL || "http://www.omdbapi.com/",
+const apiKey = import.meta.env.VITE_OMDB_API_KEY;
+const baseUrl = import.meta.env.VITE_OMDB_BASE_URL;
+
+const validateEnv = (): boolean => {
+  if (!apiKey || apiKey.trim() === "") {
+    console.error("Falta la configuración de la API Key en el archivo .env");
+    return false;
+  }
+  return true;
 };
 
-if (!env.OMDB_API_KEY && import.meta.env.MODE !== 'test') {
-  console.warn("WARNING: VITE_OMDB_API_KEY is not defined in environment variables.");
-}
+export const env = Object.freeze({
+  apiKey,
+  baseUrl,
+  isValid: validateEnv(),
+});

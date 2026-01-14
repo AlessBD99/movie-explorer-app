@@ -1,8 +1,7 @@
 import { Film, Tv } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { getPosterUrl } from "../../utils/movieUtils";
-import { useState } from "react";
+import MoviePoster from "./MoviePoster";
 
 interface MovieCardProps {
   movie: any;
@@ -16,7 +15,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
   const navigate = useNavigate();
   const id = movie.imdbID ?? movie.id ?? String(index);
   const title = movie.Title ?? movie.title ?? "Untitled";
-  const poster = getPosterUrl(movie.Poster ?? movie.poster, title);
   const year = movie.Year ?? movie.year ?? "";
   const type = movie.Type ?? movie.type ?? "movie";
   const genre = movie.Genre
@@ -24,9 +22,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
         .split(",")
         .map((g: string) => g.trim())
     : movie.genre ?? [];
-
-  const [posterError, setPosterError] = useState(false);
-  const hasPoster = movie.Poster !== 'N/A' && !posterError;
 
   return (
     <motion.div
@@ -38,18 +33,13 @@ const MovieCard: React.FC<MovieCardProps> = ({
       className="group relative cursor-pointer"
     >
       <div className="relative aspect-[2/3] overflow-hidden rounded-lg shadow-card bg-neutral-800">
-        {hasPoster ? (
-          <img
-            src={poster}
-            alt={title}
-            onError={() => setPosterError(true)}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center">
-            <span className="text-6xl">🎬</span>
-          </div>
-        )}
+        <MoviePoster
+          src={movie.Poster ?? movie.poster}
+          alt={title}
+          containerClassName="w-full h-full"
+          className="transition-transform duration-500 group-hover:scale-110"
+          fallbackSizeClassName="text-6xl"
+        />
 
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

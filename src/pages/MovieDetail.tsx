@@ -1,19 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Star, Calendar, Clock, Globe, Award } from "lucide-react";
+import { ArrowLeft, Star, Calendar, Clock, Globe, Shield, AlertCircle } from "lucide-react";
 import { useMovieDetail } from "../hooks/useMovieDetail";
-import { getPosterUrl } from "../utils/movieUtils";
+import { Modal } from "../components/ui/Modal";
+import MoviePoster from "../components/ui/MoviePoster";
 
 export const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { movie, loading, error, getMovieById } = useMovieDetail();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
       getMovieById(id);
     }
   }, [id, getMovieById]);
+
+  useEffect(() => {
+    if (error) {
+      setIsErrorModalOpen(true);
+    }
+  }, [error]);
 
   if (loading) {
     return (
@@ -24,22 +32,27 @@ export const MovieDetail = () => {
     );
   }
 
-  if (error || !movie) {
+  if (!movie) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
-        <div className="bg-red-500/10 p-4 rounded-full border border-red-500/20 text-red-500">
-          <Globe className="w-12 h-12" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-2">¡Ups! Algo salió mal</h2>
-          <p className="text-neutral-400 max-w-md">{error || "No pudimos encontrar la película que buscas."}</p>
-        </div>
-        <button 
-          onClick={() => navigate("/")}
-          className="btn-gold"
-        >
-          Volver al inicio
-        </button>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Modal
+          isOpen={isErrorModalOpen}
+          onClose={() => setIsErrorModalOpen(false)}
+          title="Error de carga"
+          description="Ocurrió un problema al obtener los detalles de la película."
+          icon={<AlertCircle className="w-10 h-10 text-red-500" />}
+          actions={
+            <button
+              onClick={() => {
+                setIsErrorModalOpen(false);
+                navigate("/");
+              }}
+              className="w-full btn-gold"
+            >
+              Cerrar
+            </button>
+          }
+        />
       </div>
     );
   }
@@ -56,18 +69,12 @@ export const MovieDetail = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         <div className="lg:col-span-4 group">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/5 bg-neutral-800">
-            <img 
-              src={getPosterUrl(movie.Poster, movie.Title)} 
-              alt={movie.Title} 
-              onError={(e) => {
-                const target = e.currentTarget;
-                const fallback = getPosterUrl(undefined, movie.Title);
-                if (target.src !== fallback) {
-                  target.src = fallback;
-                }
-              }}
-              className="w-full h-auto object-cover"
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/5 bg-neutral-800 flex items-center justify-center min-h-[450px]">
+            <MoviePoster
+              src={movie.Poster}
+              alt={movie.Title}
+              containerClassName="w-full h-full"
+              fallbackSizeClassName="text-9xl"
             />
             <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-1.5">
               <Star className="w-4 h-4 fill-current" style={{ color: 'hsl(var(--gold-light))' }} />
@@ -94,11 +101,15 @@ export const MovieDetail = () => {
                 <span>{movie.Year}</span>
               </div>
               <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
+                <span>{movie.Released}</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
                 <span>{movie.Runtime}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Award className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
+                <Shield className="w-5 h-5" style={{ color: 'hsl(var(--gold))' }} />
                 <span>{movie.Rated}</span>
               </div>
             </div>
@@ -121,6 +132,10 @@ export const MovieDetail = () => {
             <div className="space-y-2">
               <p className="text-neutral-500 text-sm uppercase font-bold tracking-widest">Reparto</p>
               <p className="text-white text-lg font-semibold leading-snug">{movie.Actors}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-neutral-500 text-sm uppercase font-bold tracking-widest">Premios</p>
+              <p className="text-[hsl(var(--gold-light))] font-medium leading-relaxed italic">{movie.Awards}</p>
             </div>
             <div className="space-y-2">
               <p className="text-neutral-500 text-sm uppercase font-bold tracking-widest">Escritores</p>

@@ -7,9 +7,9 @@ import { env } from "../../config/env";
 
 export class ApiMovieRepository implements IMovieRepository {
   async getMovieById(id: string): Promise<Movie | null> {
-    const url = `${env.OMDB_BASE_URL}?apikey=${env.OMDB_API_KEY}&i=${id}`;
+    const url = `${env.baseUrl}?apikey=${env.apiKey}&i=${id}`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url);  
       const data: Movie = await response.json();
       return data.Response === "True" ? data : null;
     } catch (error) {
@@ -19,7 +19,7 @@ export class ApiMovieRepository implements IMovieRepository {
   }
 
   async searchMovies(title: string, page: number = 1): Promise<SearchResponse> {
-    const url = `${env.OMDB_BASE_URL}?apikey=${env.OMDB_API_KEY}&s=${encodeURIComponent(title)}&page=${page}`;
+    const url = `${env.baseUrl}?apikey=${env.apiKey}&s=${encodeURIComponent(title)}&page=${page}`;
     try {
       const response = await fetch(url);
       const data: SearchResponse = await response.json();

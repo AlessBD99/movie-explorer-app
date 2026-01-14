@@ -17,7 +17,6 @@ export const useMovies = () => {
     []
   );
 
-  // Memoized derived state for filtered movies
   const filteredMovies = useMemo(() => {
     return FilterService.filterMovies(allMovies, filters);
   }, [allMovies, filters]);

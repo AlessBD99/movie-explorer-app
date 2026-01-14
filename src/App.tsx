@@ -4,8 +4,14 @@ import { Film, Home as HomeIcon, Heart } from "lucide-react";
 import Navbar from "./layouts/NavBar";
 import { Home } from "./pages/Home";
 import { MovieDetail } from "./pages/MovieDetail";
+import { env } from "./config/env";
+import { EnvError } from "./components/ui/EnvError";
 
 function App() {
+  if (!env.isValid) {
+    return <EnvError />;
+  }
+
   const navConfig = {
     logoIcon: Film,
     links: [

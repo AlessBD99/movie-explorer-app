@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { Modal } from "../components/ui/Modal";
+import MoviePoster from "../components/ui/MoviePoster";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -24,27 +25,24 @@ export const Home = () => {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState("");
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [posterErrors, setPosterErrors] = useState<Set<string>>(new Set());
 
-  // Sync modal with error state from hook
   useEffect(() => {
     if (error) {
       setIsErrorModalOpen(true);
     }
   }, [error]);
 
-  const handleSearchDebounce = (() => {
-    let t: number | undefined;
-    return (q: string) => {
-      setSearchQuery(q);
-      if (t) window.clearTimeout(t);
-      t = window.setTimeout(() => {
-        searchMoviesByTitle(q);
-      }, 300);
-    };
-  })();
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      searchMoviesByTitle(searchQuery);
+    }
+  };
 
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <section className=" flex flex-col items-center justify-center min-h-[70vh] gap-6">
@@ -64,7 +62,9 @@ export const Home = () => {
           aria-label="Buscar películas"
           value={searchQuery}
           maxLength={50}
-          onChange={(e) => handleSearchDebounce(e.currentTarget.value)}
+          onChange={(e) => setSearchQuery(e.currentTarget.value)}
+          onKeyDown={handleKeyDown}
+          onSearch={handleSearch}
         />
       </div>
 
@@ -101,12 +101,6 @@ export const Home = () => {
               <div className="flex flex-col gap-4 w-full">
                 {movies.map((movie: any, index: number) => {
                   const id = movie.imdbID ?? movie.id ?? String(index);
-                  const hasPosterError = posterErrors.has(id);
-                  const poster = movie.Poster !== 'N/A' && !hasPosterError ? movie.Poster : null;
-                  
-                  const handlePosterError = () => {
-                    setPosterErrors(prev => new Set(prev).add(id));
-                  };
                   
                   return (
                     <div 
@@ -123,18 +117,12 @@ export const Home = () => {
                         e.currentTarget.style.borderColor = 'hsl(var(--border))';
                       }}
                     >
-                      <div className="w-16 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-800 shadow-lg flex items-center justify-center">
-                        {poster ? (
-                          <img 
-                            src={poster} 
-                            alt={movie.Title}
-                            className="w-full h-full object-cover"
-                            onError={handlePosterError}
-                          />
-                        ) : (
-                          <span className="text-4xl">🎬</span>
-                        )}
-                      </div>
+                      <MoviePoster
+                        src={movie.Poster}
+                        alt={movie.Title}
+                        containerClassName="w-16 h-24 rounded-lg shadow-lg"
+                        fallbackSizeClassName="text-4xl"
+                      />
                       <div className="flex-grow min-w-0">
                         <h3 className="text-xl font-bold truncate transition-colors" style={{ color: 'inherit' }}>
                           {movie.Title}
